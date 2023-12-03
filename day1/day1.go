@@ -8,22 +8,37 @@ import (
 )
 
 func SolveDay1() {
+	fmt.Println()
 	fmt.Println("Solving Day 1!")
-	fmt.Println("Solution for part 1 is: ", getDigitsAndSum())
-	fmt.Println("Solution for part 2 is: ", wordDigitsPossible())
+	calibrationDigits, err := sumCalibrationValuesDigits("day1/input.txt")
+	if err != nil {
+		fmt.Println("Failed while trying to solve with only digits with error ", err)
+		fmt.Println()
+	}
+	fmt.Println("Solution for part 1 is: ", calibrationDigits)
+	calibrationDigitsWords, err := sumCalibrationValuesDigitsWords("day1/input.txt")
+	if err != nil {
+		fmt.Println("Failed while trying to solve with digits and words with error ", err)
+		fmt.Println()
+	}
+	fmt.Println("Solution for part 2 is: ", calibrationDigitsWords)
+	fmt.Println()
 }
 
-func getDigitsAndSum() (answer int) {
-	inputFile, err := os.Open("day1/input.txt")
+func sumCalibrationValuesDigits(filename string) (int, error) {
+	var answer int
+	var err error
+	inputFile, err := os.Open(filename)
+	defer inputFile.Close()
 	if err != nil {
 		fmt.Println("Error opening the input file for day 1 with error: ", err)
-		return
+		return answer, err
 	}
 	for {
 		var s string
 		_, err := fmt.Fscanln(inputFile, &s)
 		if err == io.EOF {
-			return
+			return answer, nil
 		}
 		// input as runes
 		rs := []rune(s)
@@ -58,17 +73,19 @@ var wordToNumber map[string]int = map[string]int{
 	"nine":  9,
 }
 
-func wordDigitsPossible() (answer int) {
-	inputFile, err := os.Open("day1/input.txt")
+func sumCalibrationValuesDigitsWords(filename string) (int, error) {
+	var answer int
+	inputFile, err := os.Open(filename)
+	defer inputFile.Close()
 	if err != nil {
 		fmt.Println("Error opening the input file for day 1 with error: ", err)
-		return
+		return answer, err
 	}
 	for {
 		var s string
 		_, err := fmt.Fscanln(inputFile, &s)
 		if err == io.EOF {
-			return
+			return answer, nil
 		}
 		// input as runes
 		rs := []rune(s)
@@ -123,6 +140,7 @@ func wordDigitsPossible() (answer int) {
 		}
 	}
 }
+
 func Reverse(s string) string {
 	runes := []rune(s)
 	for i, j := 0, len(runes)-1; i < j; i, j = i+1, j-1 {
