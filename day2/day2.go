@@ -24,11 +24,10 @@ func SolveDay2() {
 func solveCubeConundrum(filename string) (int, int, error) {
 	var sumIDs, sumPowers int
 	var err error
-	fmt.Println("filename: ", filename)
 	inputFile, err := os.Open(filename)
 	defer inputFile.Close()
 	if err != nil {
-		fmt.Println("Error opening the input file for day 1 with error: ", err)
+		fmt.Println("Error opening the input file for day 2 with error: ", err)
 		return sumIDs, sumPowers, err
 	}
 	var colorToMax map[string]int = map[string]int{
