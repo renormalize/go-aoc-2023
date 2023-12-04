@@ -11,17 +11,18 @@ import (
 func SolveDay4() {
 	fmt.Println()
 	fmt.Println("Solving Day 4!")
-	points, points2, err := getPoints1("day4/input.txt")
+	points, scratchCards, err := solveScratchCards("day4/input.txt")
 	if err != nil {
 		fmt.Println("Failed while trying to solve with error: ", err)
 		fmt.Println()
+		return
 	}
-	fmt.Println("The total points 1 are: ", points)
-	fmt.Println("The total points 2 are: ", points2)
+	fmt.Println("The total points are:\t\t\t", points)
+	fmt.Println("The total total scratch cards are:\t", scratchCards)
 	fmt.Println()
 }
 
-func getPoints1(filename string) (int, int, error) {
+func solveScratchCards(filename string) (int, int, error) {
 	inputFile, err := os.Open(filename)
 	defer inputFile.Close()
 	if err != nil {
@@ -29,9 +30,6 @@ func getPoints1(filename string) (int, int, error) {
 	}
 	scanner := bufio.NewScanner(inputFile)
 	totalCardMap := make(map[int]int)
-	for i := 1; i <= 213; i++ {
-		totalCardMap[i] = 1
-	}
 	card := 1
 	var points int
 	for {
@@ -39,47 +37,54 @@ func getPoints1(filename string) (int, int, error) {
 		if !b {
 			break
 		}
+		if _, ok := totalCardMap[card]; !ok {
+			totalCardMap[card] = 1
+		}
 		line := scanner.Text()
-		lineIndex := strings.Index(line, ":")
-		line = line[lineIndex+1:]
-		lines := strings.Split(line, "|")
-		flags := strings.Split(lines[0], " ")
-		var flagMap map[int]bool = make(map[int]bool)
-		for _, stringFlag := range flags {
-			convVal, _ := strconv.Atoi(stringFlag)
-			if convVal == 0 {
+		colonIndex := strings.Index(line, ":")
+		line = line[colonIndex+1:]
+		cardNumbers := strings.Split(line, "|")
+		winningCards := strings.Split(cardNumbers[0], " ")
+		var winningCardMap map[int]bool = make(map[int]bool)
+		for _, stringFlag := range winningCards {
+			winningCardNumber, _ := strconv.Atoi(stringFlag)
+			if winningCardNumber == 0 {
 				continue
 			}
-			flagMap[convVal] = true
+			winningCardMap[winningCardNumber] = true
 		}
-		vals := strings.Split(lines[1], " ")
-		var hits int
-		for _, st := range vals {
-			st := strings.TrimSpace(st)
-			value, _ := strconv.Atoi(st)
+		numbers := strings.Split(cardNumbers[1], " ")
+		var wins int
+		for _, number := range numbers {
+			number := strings.TrimSpace(number)
+			value, _ := strconv.Atoi(number)
 			if value == 0 {
 				continue
 			}
-			if flagMap[value] == true {
-				hits++
+			if winningCardMap[value] == true {
+				wins++
 			}
 		}
-		if hits != 0 {
-			points += IntPow(2, hits-1)
-			for h := hits; h >= 1; h-- {
-				totalCardMap[card+h] = totalCardMap[card+h] + totalCardMap[card]
+		if wins != 0 {
+			points += intPow(2, wins-1)
+			for i := wins; i >= 1; i-- {
+				if _, ok := totalCardMap[card+i]; !ok {
+					totalCardMap[card+i] = 1
+				}
+				// card + i guaranteed to be within the total number of cards
+				totalCardMap[card+i] += totalCardMap[card]
 			}
 		}
 		card++
 	}
-	var finSum int = 0
-	for _, vv := range totalCardMap {
-		finSum += vv
+	var totalScratchCards int = 0
+	for _, numberCards := range totalCardMap {
+		totalScratchCards += numberCards
 	}
-	return points, finSum, nil
+	return points, totalScratchCards, nil
 }
 
-func IntPow(base, exp int) int {
+func intPow(base, exp int) int {
 	result := 1
 	for {
 		if exp&1 == 1 {

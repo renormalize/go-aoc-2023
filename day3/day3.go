@@ -15,9 +15,10 @@ func SolveDay3() {
 	if err != nil {
 		fmt.Println("Failed while trying to solve with error: ", err)
 		fmt.Println()
+		return
 	}
-	fmt.Println("The sum of the engine schematic numbers is: ", sumNumbers)
-	fmt.Println("The sum of the gear ratios is: ", gearRatioSum)
+	fmt.Println("The sum of the engine schematic numbers is:\t", sumNumbers)
+	fmt.Println("The sum of the gear ratios is:\t\t\t", gearRatioSum)
 	fmt.Println()
 }
 

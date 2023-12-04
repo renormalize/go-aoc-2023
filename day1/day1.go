@@ -14,14 +14,16 @@ func SolveDay1() {
 	if err != nil {
 		fmt.Println("Failed while trying to solve with only digits with error ", err)
 		fmt.Println()
+		return
 	}
-	fmt.Println("Solution for part 1 is: ", calibrationDigits)
+	fmt.Println("The sum of calibration values with only digits is:\t", calibrationDigits)
 	calibrationDigitsWords, err := sumCalibrationValuesDigitsWords("day1/input.txt")
 	if err != nil {
 		fmt.Println("Failed while trying to solve with digits and words with error ", err)
 		fmt.Println()
+		return
 	}
-	fmt.Println("Solution for part 2 is: ", calibrationDigitsWords)
+	fmt.Println("The sum of calibration values with digits and words is:\t", calibrationDigitsWords)
 	fmt.Println()
 }
 

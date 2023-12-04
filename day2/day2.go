@@ -15,9 +15,10 @@ func SolveDay2() {
 	if err != nil {
 		fmt.Println("Failed while trying to solve with error ", err)
 		fmt.Println()
+		return
 	}
-	fmt.Println("The sum of the Game IDs is: ", sumIDs)
-	fmt.Println("The sum of the Game IDs is: ", sumPowers)
+	fmt.Println("The sum of the Game IDs is:\t\t", sumIDs)
+	fmt.Println("The sum of the powers of the sets is:\t", sumPowers)
 	fmt.Println()
 }
 
